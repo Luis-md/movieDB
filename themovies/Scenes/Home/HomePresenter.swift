@@ -12,14 +12,13 @@
 
 import UIKit
 
-protocol HomePresentationLogic
-{
+protocol HomePresentationLogic {
     func presentFilterThemes(response: Home.MovieGenderFilter.Response)
     func presentUpdatedSelection(response: Home.MovieGenderFilter.Response)
+    func presentMoviesBanner(response: Home.MovieBanner.Response)
 }
 
-class HomePresenter: HomePresentationLogic
-{
+class HomePresenter: HomePresentationLogic {
     weak var viewController: HomeDisplayLogic?
     
     // MARK: Do something
@@ -32,5 +31,10 @@ class HomePresenter: HomePresentationLogic
     func presentUpdatedSelection(response: Home.MovieGenderFilter.Response) {
         let viewModel = Home.MovieGenderFilter.ViewModel(movies: response.movies) 
         viewController?.displayClickedPill(viewModel: viewModel)
+    }
+    
+    func presentMoviesBanner(response: Home.MovieBanner.Response) {
+        let viewModel = Home.MovieBanner.ViewModel(images: response.images)
+        viewController?.displayBanner(viewModel: viewModel)
     }
 }

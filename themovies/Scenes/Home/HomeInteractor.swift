@@ -15,6 +15,7 @@ import UIKit
 protocol HomeBusinessLogic {
     func changeSelectedItem(request: Home.MovieGenderFilter.Request)
     func getMovieThemes()
+    func getMovies()
 }
 
 protocol HomeDataStore {
@@ -24,6 +25,7 @@ protocol HomeDataStore {
 class HomeInteractor: HomeBusinessLogic, HomeDataStore {
     var presenter: HomePresentationLogic?
     var worker: HomeWorker?
+    var service: ServiceAPIProtocol?
     
     var themes: [ContentMovie] = [ContentMovie(isSelected: false, gender: "Filmes"),
                                   ContentMovie(isSelected: false, gender: "Séries"),
@@ -55,5 +57,16 @@ class HomeInteractor: HomeBusinessLogic, HomeDataStore {
         
         presenter?.presentUpdatedSelection(response: Home.MovieGenderFilter.Response(movies: themes))
 
+    }
+    
+    func getMovies() {
+        service?.getMovies(completionHandler: { result in
+            switch result {
+            case .success(let movies):
+                self.presenter?.presentMoviesBanner(response: Home.MovieBanner.Response(images: movies))
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        })
     }
 }

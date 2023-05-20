@@ -39,4 +39,15 @@ enum Home
         }
     }
     
+    enum MovieBanner {
+        struct Request {
+        }
+        struct Response {
+            let images: Movie
+        }
+        struct ViewModel {
+            let images: Movie
+        }
+    }
+    
 }

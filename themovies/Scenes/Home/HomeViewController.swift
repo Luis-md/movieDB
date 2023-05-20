@@ -15,6 +15,7 @@ import UIKit
 protocol HomeDisplayLogic: AnyObject {
     func displayFilterOptions(viewModel: Home.MovieGenderFilter.ViewModel)
     func displayClickedPill(viewModel: Home.MovieGenderFilter.ViewModel)
+    func displayBanner(viewModel: Home.MovieBanner.ViewModel)
 }
 
 struct ContentMovie {
@@ -25,7 +26,7 @@ struct ContentMovie {
 class HomeViewController: UIViewController, HomeDisplayLogic {
     var interactor: HomeBusinessLogic?
     var themes: [ContentMovie] = []
-    var movies: [String] = ["matrix_movie"]
+    var movies: [DetailedMovie] = []
     
     // MARK: Layout
     lazy var scrollView: UIScrollView = {
@@ -147,6 +148,7 @@ class HomeViewController: UIViewController, HomeDisplayLogic {
     // MARK: Do something
     
     func configureView() {
+        interactor?.getMovies()
         themePills.dataSource = self
         themePills.delegate = self
         
@@ -173,6 +175,14 @@ class HomeViewController: UIViewController, HomeDisplayLogic {
     func displayClickedPill(viewModel: Home.MovieGenderFilter.ViewModel) {
         themes = viewModel.movies
         themePills.reloadData()
+    }
+    
+    func displayBanner(viewModel: Home.MovieBanner.ViewModel) {
+        movies = viewModel.images.results
+        DispatchQueue.main.async { [weak self] in
+            guard let self else { return }
+            self.movieBanner.reloadData()
+        }
     }
 }
 
@@ -255,7 +265,7 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
         if collectionView == themePills {
             return themes.count
         } else {
-            return 10
+            return movies.count
         }
     }
     
@@ -270,7 +280,7 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
         } else {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "movie_cell", for: indexPath) as? MovieBannerCell else { return UICollectionViewCell() }
             cell.backgroundColor = .green
-            cell.setupCell(content: "matrix_movie")
+            cell.setupCell(content: movies[indexPath.row].backdrop_path)
             
             return cell
         }

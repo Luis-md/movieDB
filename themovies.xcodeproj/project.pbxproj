@@ -38,6 +38,8 @@
 		71D1605529FD60610012C622 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71D1605429FD60610012C622 /* SceneDelegate.swift */; };
 		71D1605C29FD60650012C622 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 71D1605B29FD60650012C622 /* Assets.xcassets */; };
 		71D1605F29FD60650012C622 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 71D1605D29FD60650012C622 /* LaunchScreen.storyboard */; };
+		71F449912A11174F00360ADF /* ServiceAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71F449902A11174E00360ADF /* ServiceAPI.swift */; };
+		71F449942A1119FF00360ADF /* Movie.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71F449932A1119FE00360ADF /* Movie.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -74,6 +76,8 @@
 		71D1606E29FD61A60012C622 /* Inter-Thin.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Inter-Thin.ttf"; sourceTree = "<group>"; };
 		71D1606F29FD61A60012C622 /* Inter-Black.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Inter-Black.ttf"; sourceTree = "<group>"; };
 		71D1607029FD61A60012C622 /* Inter-ExtraBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Inter-ExtraBold.ttf"; sourceTree = "<group>"; };
+		71F449902A11174E00360ADF /* ServiceAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceAPI.swift; sourceTree = "<group>"; };
+		71F449932A1119FE00360ADF /* Movie.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Movie.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -130,6 +134,7 @@
 		71ACD16829FFE3B6003F41B5 /* Home */ = {
 			isa = PBXGroup;
 			children = (
+				71F449922A1119E600360ADF /* Model */,
 				715D2E4F2A00522A00103710 /* Cells */,
 				71ACD16B29FFE416003F41B5 /* HomePresenter.swift */,
 				71ACD16C29FFE416003F41B5 /* HomeWorker.swift */,
@@ -144,6 +149,7 @@
 		71BD5D4729FD63C80068E25F /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				71F4498F2A11173700360ADF /* Network */,
 				714ADA6729FEA8A000417AC1 /* Component */,
 				71BD5D4829FD63D70068E25F /* Extensions */,
 				71D1606629FD61760012C622 /* Assets */,
@@ -212,6 +218,22 @@
 				71D1606E29FD61A60012C622 /* Inter-Thin.ttf */,
 			);
 			path = Fonts;
+			sourceTree = "<group>";
+		};
+		71F4498F2A11173700360ADF /* Network */ = {
+			isa = PBXGroup;
+			children = (
+				71F449902A11174E00360ADF /* ServiceAPI.swift */,
+			);
+			path = Network;
+			sourceTree = "<group>";
+		};
+		71F449922A1119E600360ADF /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				71F449932A1119FE00360ADF /* Movie.swift */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -300,6 +322,7 @@
 				71ACD18029FFE54F003F41B5 /* LoginStarterModels.swift in Sources */,
 				71ACD18429FFE77F003F41B5 /* HomeConfigurator.swift in Sources */,
 				71ACD17529FFE416003F41B5 /* HomeViewController.swift in Sources */,
+				71F449912A11174F00360ADF /* ServiceAPI.swift in Sources */,
 				71ACD17229FFE416003F41B5 /* HomeWorker.swift in Sources */,
 				71BD5D4A29FD63EC0068E25F /* UIViewExt.swift in Sources */,
 				71ACD16729FFE27D003F41B5 /* LoginConfigurator.swift in Sources */,
@@ -312,6 +335,7 @@
 				71D1605529FD60610012C622 /* SceneDelegate.swift in Sources */,
 				715D2E512A00524D00103710 /* ThemePillsCell.swift in Sources */,
 				71A9811F2A01BCCD009FD61C /* MovieBannerCell.swift in Sources */,
+				71F449942A1119FF00360ADF /* Movie.swift in Sources */,
 				71ACD17429FFE416003F41B5 /* HomeModels.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

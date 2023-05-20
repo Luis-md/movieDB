@@ -11,13 +11,25 @@ final class MovieBannerCell: UICollectionViewCell {
     lazy var movieImage: UIImageView = {
         let img = UIImageView()
         img.translatesAutoresizingMaskIntoConstraints = false
-        img.contentMode = .scaleToFill
+        img.contentMode = .scaleAspectFill
         return img
     }()
     
     public func setupCell(content: String) {
         addSubview(movieImage)
-        movieImage.image = UIImage(named: content)
+        let fullURL = "https://image.tmdb.org/t/p/w500/\(content)"
+        if let urlPhoto = URL(string: fullURL) {
+            DispatchQueue.global().async {
+                do {
+                    let data = try Data(contentsOf: urlPhoto)
+                    let image = UIImage(data: data)
+                    DispatchQueue.main.async {
+                        self.movieImage.image = image
+                    }
+                } catch _ {}
+            }
+        }
+        
         NSLayoutConstraint.activate([
             movieImage.topAnchor.constraint(equalTo: topAnchor),
             movieImage.bottomAnchor.constraint(equalTo: bottomAnchor),
