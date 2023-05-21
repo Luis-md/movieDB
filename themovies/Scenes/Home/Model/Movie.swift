@@ -12,5 +12,11 @@ struct Movie: Codable {
 }
 
 struct DetailedMovie: Codable {
-    let backdrop_path: String
+    let poster: String
+    let title: String
+        
+    private enum CodingKeys : String, CodingKey {
+        case poster = "poster_path"
+        case title
+    }
 }

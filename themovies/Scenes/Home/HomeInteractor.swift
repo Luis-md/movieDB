@@ -16,6 +16,7 @@ protocol HomeBusinessLogic {
     func changeSelectedItem(request: Home.MovieGenderFilter.Request)
     func getMovieThemes()
     func getMovies()
+    func getPopular()
 }
 
 protocol HomeDataStore {
@@ -25,7 +26,7 @@ protocol HomeDataStore {
 class HomeInteractor: HomeBusinessLogic, HomeDataStore {
     var presenter: HomePresentationLogic?
     var worker: HomeWorker?
-    var service: ServiceAPIProtocol?
+    var service: MovieProvider?
     
     var themes: [ContentMovie] = [ContentMovie(isSelected: false, gender: "Filmes"),
                                   ContentMovie(isSelected: false, gender: "Séries"),
@@ -60,13 +61,28 @@ class HomeInteractor: HomeBusinessLogic, HomeDataStore {
     }
     
     func getMovies() {
-        service?.getMovies(completionHandler: { result in
-            switch result {
-            case .success(let movies):
-                self.presenter?.presentMoviesBanner(response: Home.MovieBanner.Response(images: movies))
+        service?.nowPlaying { [weak self] in
+            guard let self else { return }
+            switch $0 {
+            case .success(let movie):
+                let response = Home.MovieBanner.Response(images: movie)
+                self.presenter?.presentMoviesBanner(response: response)
             case .failure(let error):
                 print(error.localizedDescription)
             }
-        })
+        }
+    }
+    
+    func getPopular() {
+        service?.popularMovie { [weak self] in
+            guard let self else { return }
+            switch $0 {
+            case .success(let movie):
+                let response = Home.MovieBanner.Response(images: movie)
+                self.presenter?.presentPopularMovies(response: response)
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        }
     }
 }

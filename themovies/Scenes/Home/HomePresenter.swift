@@ -16,6 +16,7 @@ protocol HomePresentationLogic {
     func presentFilterThemes(response: Home.MovieGenderFilter.Response)
     func presentUpdatedSelection(response: Home.MovieGenderFilter.Response)
     func presentMoviesBanner(response: Home.MovieBanner.Response)
+    func presentPopularMovies(response: Home.MovieBanner.Response)
 }
 
 class HomePresenter: HomePresentationLogic {
@@ -36,5 +37,10 @@ class HomePresenter: HomePresentationLogic {
     func presentMoviesBanner(response: Home.MovieBanner.Response) {
         let viewModel = Home.MovieBanner.ViewModel(images: response.images)
         viewController?.displayBanner(viewModel: viewModel)
+    }
+    
+    func presentPopularMovies(response: Home.MovieBanner.Response) {
+        let viewModel = Home.MovieBanner.ViewModel(images: response.images)
+        viewController?.displayPopularMovie(viewModel: viewModel)
     }
 }

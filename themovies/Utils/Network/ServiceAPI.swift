@@ -7,35 +7,78 @@
 
 import Foundation
 
-protocol ServiceAPIProtocol {
-    func getMovies(completionHandler: @escaping (Result<Movie, Error>) -> Void)
+enum APIError: Error {
+    case generic
+    case parsingError
 }
 
-class ServiceAPI: ServiceAPIProtocol {
-    private let apiUrl: String = "https://api.themoviedb.org/3/movie/now_playing?api_key=e6a0bb4b36db22f170511e1bd3b86e5a"
-    //private let apiKey: String = "e6a0bb4b36db22f170511e1bd3b86e5a"
+protocol MovieProvider {
+    func nowPlaying(completion: @escaping((Result<Movie, APIError>) -> Void))
+    func popularMovie(completion: @escaping((Result<Movie, APIError>) -> Void))
+}
 
-    func getMovies(completionHandler: @escaping (Result<Movie, Error>) -> Void) {
-        let url: URL = URL(string: apiUrl)!
+class ServiceAPI: MovieProvider {
+    private let baseUrl: String = "https://api.themoviedb.org/3/movie"
+    private let apiKey: String = "<<APIKEY>>"
+    
+    private enum APIPath {
+        case nowPlaying
+        case popular
         
-        let task = URLSession.shared.dataTask(with: url) { data, response, error in
-            if let error = error {
-              print("Error with fetching films: \(error)")
-              return
-            }
-            
-            guard let httpResponse = response as? HTTPURLResponse,
-                  (200...299).contains(httpResponse.statusCode) else {
-              print("Error with the response, unexpected status code: \(response)")
-              return
-            }
-
-            if let data = data,
-              let filmSummary = try? JSONDecoder().decode(Movie.self, from: data) {
-                completionHandler(.success(filmSummary))
+        var path: String {
+            switch self {
+            case .nowPlaying:
+                return "/now_playing"
+            case .popular:
+                return "/popular"
             }
         }
+    }
+    
+    private enum Method {
+        case GET
+    }
+    
+    func nowPlaying(completion: @escaping((Result<Movie, APIError>) -> Void)) {
+        configRequest(endpoint: .nowPlaying, completion: completion)
+    }
+    
+    func popularMovie(completion: @escaping ((Result<Movie, APIError>) -> Void)) {
+        configRequest(endpoint: .popular, completion: completion)
+    }
+    
+    private func configRequest<T:Codable>(endpoint: APIPath, method: Method = .GET, completion: @escaping((Result<T, APIError>) -> Void)) {
+        let path = "\(baseUrl)\(endpoint.path)\(apiKey)"
         
-        task.resume()
+        guard let url = URL(string: path) else {
+            completion(.failure(.generic))
+            return
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "\(method)"
+        request.allHTTPHeaderFields = ["Content-Type":"application/json"]
+        makeCall(with: request, completion: completion)
+    }
+    
+    private func makeCall<T: Codable>(with request: URLRequest, completion: @escaping((Result<T, APIError>) -> Void)) {
+        let dataTask = URLSession.shared.dataTask(with: request) { data, resp, error in
+            guard error == nil else {
+                completion(.failure(.generic))
+                return
+            }
+            
+            do {
+                guard let data = data else {
+                    completion(.failure(.generic))
+                    return
+                }
+                let object = try JSONDecoder().decode(T.self, from: data)
+                completion(.success(object))
+            } catch {
+                completion(.failure(.parsingError))
+            }
+        }
+        dataTask.resume()
     }
 }

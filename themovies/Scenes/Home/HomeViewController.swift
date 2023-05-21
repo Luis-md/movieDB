@@ -16,6 +16,7 @@ protocol HomeDisplayLogic: AnyObject {
     func displayFilterOptions(viewModel: Home.MovieGenderFilter.ViewModel)
     func displayClickedPill(viewModel: Home.MovieGenderFilter.ViewModel)
     func displayBanner(viewModel: Home.MovieBanner.ViewModel)
+    func displayPopularMovie(viewModel: Home.MovieBanner.ViewModel)
 }
 
 struct ContentMovie {
@@ -27,11 +28,13 @@ class HomeViewController: UIViewController, HomeDisplayLogic {
     var interactor: HomeBusinessLogic?
     var themes: [ContentMovie] = []
     var movies: [DetailedMovie] = []
+    var popularMoviesList: [DetailedMovie] = []
     
     // MARK: Layout
     lazy var scrollView: UIScrollView = {
         let sv = UIScrollView()
         sv.translatesAutoresizingMaskIntoConstraints = false
+        sv.contentInsetAdjustmentBehavior = .never
         return sv
     }()
     
@@ -40,7 +43,7 @@ class HomeViewController: UIViewController, HomeDisplayLogic {
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
-    
+
     lazy var titlePage: UILabel = {
         let lbl = UILabel()
         lbl.text = "O que você quer assistir hoje?"
@@ -122,6 +125,7 @@ class HomeViewController: UIViewController, HomeDisplayLogic {
         cv.translatesAutoresizingMaskIntoConstraints = false
         cv.register(MovieBannerCell.self, forCellWithReuseIdentifier: "movie_cell")
         cv.backgroundColor = .clear
+        cv.contentInsetAdjustmentBehavior = .never
         return cv
     }()
     
@@ -135,9 +139,27 @@ class HomeViewController: UIViewController, HomeDisplayLogic {
         return lbl
     }()
     
+    lazy var popularMovies: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .horizontal
+        let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        cv.showsHorizontalScrollIndicator = false
+        cv.translatesAutoresizingMaskIntoConstraints = false
+        cv.register(MovieBannerCell.self, forCellWithReuseIdentifier: "movie_cell")
+        cv.backgroundColor = .clear
+        cv.contentInsetAdjustmentBehavior = .never
+        return cv
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         configureView()
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        popularMovies.collectionViewLayout.invalidateLayout()
+        movieBanner.collectionViewLayout.invalidateLayout()
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -149,11 +171,15 @@ class HomeViewController: UIViewController, HomeDisplayLogic {
     
     func configureView() {
         interactor?.getMovies()
+        interactor?.getPopular()
         themePills.dataSource = self
         themePills.delegate = self
         
         movieBanner.dataSource = self
         movieBanner.delegate = self
+        
+        popularMovies.dataSource = self
+        popularMovies.delegate = self
         
         let gradientLayer = CAGradientLayer()
         gradientLayer.frame = view.bounds
@@ -178,10 +204,18 @@ class HomeViewController: UIViewController, HomeDisplayLogic {
     }
     
     func displayBanner(viewModel: Home.MovieBanner.ViewModel) {
-        movies = viewModel.images.results
         DispatchQueue.main.async { [weak self] in
             guard let self else { return }
+            self.movies = viewModel.images.results
             self.movieBanner.reloadData()
+        }
+    }
+    
+    func displayPopularMovie(viewModel: Home.MovieBanner.ViewModel) {
+        DispatchQueue.main.async { [weak self] in
+            guard let self else { return }
+            self.popularMoviesList = viewModel.images.results
+            self.popularMovies.reloadData()
         }
     }
 }
@@ -197,6 +231,7 @@ extension HomeViewController {
         containerView.addSubview(latestLabel)
         containerView.addSubview(movieBanner)
         containerView.addSubview(popularLabel)
+        containerView.addSubview(popularMovies)
         
         NSLayoutConstraint.activate([
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -211,7 +246,7 @@ extension HomeViewController {
             containerView.topAnchor.constraint(equalTo: scrollView.topAnchor),
             containerView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
             containerView.heightAnchor.constraint(equalTo: scrollView.frameLayoutGuide.heightAnchor),
-
+            
             titlePage.topAnchor.constraint(equalTo: containerView.safeAreaLayoutGuide.topAnchor, constant: 64),
             titlePage.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 16),
             
@@ -229,20 +264,25 @@ extension HomeViewController {
             themePills.trailingAnchor.constraint(equalTo: textField.trailingAnchor),
             themePills.leadingAnchor.constraint(equalTo: textField.leadingAnchor),
             themePills.heightAnchor.constraint(equalToConstant: 30),
-
+            
             latestLabel.topAnchor.constraint(equalTo: themePills.bottomAnchor, constant: 20),
             latestLabel.trailingAnchor.constraint(equalTo: themePills.trailingAnchor),
             latestLabel.leadingAnchor.constraint(equalTo: themePills.leadingAnchor),
-
+            
             movieBanner.topAnchor.constraint(equalTo: latestLabel.bottomAnchor, constant: 16),
-            movieBanner.trailingAnchor.constraint(equalTo: latestLabel.trailingAnchor),
+            movieBanner.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
             movieBanner.leadingAnchor.constraint(equalTo: latestLabel.leadingAnchor),
             movieBanner.heightAnchor.constraint(equalToConstant: view.frame.height / 4),
             
             popularLabel.topAnchor.constraint(equalTo: movieBanner.bottomAnchor, constant: 16),
             popularLabel.trailingAnchor.constraint(equalTo: textField.trailingAnchor),
-            popularLabel.bottomAnchor.constraint(lessThanOrEqualTo: containerView.safeAreaLayoutGuide.bottomAnchor, constant: -16),
-            popularLabel.leadingAnchor.constraint(equalTo: textField.leadingAnchor)
+            popularLabel.leadingAnchor.constraint(equalTo: textField.leadingAnchor),
+            
+            popularMovies.topAnchor.constraint(equalTo: popularLabel.bottomAnchor, constant: 16),
+            popularMovies.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
+            popularMovies.bottomAnchor.constraint(lessThanOrEqualTo: containerView.bottomAnchor, constant: -16),
+            popularMovies.leadingAnchor.constraint(equalTo: popularLabel.leadingAnchor),
+            popularMovies.heightAnchor.constraint(equalToConstant: view.frame.height / 4),
         ])
     }
 }
@@ -264,8 +304,10 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if collectionView == themePills {
             return themes.count
-        } else {
+        } else if collectionView == movieBanner {
             return movies.count
+        } else {
+            return popularMoviesList.count
         }
     }
     
@@ -279,15 +321,18 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
             return cell
         } else {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "movie_cell", for: indexPath) as? MovieBannerCell else { return UICollectionViewCell() }
-            cell.backgroundColor = .green
-            cell.setupCell(content: movies[indexPath.row].backdrop_path)
-            
+            let isPopular = collectionView == popularMovies
+            let movie = isPopular ? popularMoviesList[indexPath.row] : movies[indexPath.row]
+            if cell.movieImage.image == nil {
+                cell.setupCell(content: movie.poster, title: movie.title)
+            }
             return cell
         }
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        interactor?.changeSelectedItem(request: Home.MovieGenderFilter.Request(indexClicked: indexPath.row))
+        if collectionView == themePills {
+            interactor?.changeSelectedItem(request: Home.MovieGenderFilter.Request(indexClicked: indexPath.row))
+        }
     }
-    
 }

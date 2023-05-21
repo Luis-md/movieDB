@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SDWebImage
 
 final class MovieBannerCell: UICollectionViewCell {
     lazy var movieImage: UIImageView = {
@@ -15,28 +16,39 @@ final class MovieBannerCell: UICollectionViewCell {
         return img
     }()
     
-    public func setupCell(content: String) {
+    required init?(coder aDecoder: NSCoder) { nil }
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        configureView()
+    }
+    
+    private func configureView() {
         addSubview(movieImage)
-        let fullURL = "https://image.tmdb.org/t/p/w500/\(content)"
-        if let urlPhoto = URL(string: fullURL) {
-            DispatchQueue.global().async {
-                do {
-                    let data = try Data(contentsOf: urlPhoto)
-                    let image = UIImage(data: data)
-                    DispatchQueue.main.async {
-                        self.movieImage.image = image
-                    }
-                } catch _ {}
-            }
-        }
-        
         NSLayoutConstraint.activate([
             movieImage.topAnchor.constraint(equalTo: topAnchor),
-            movieImage.bottomAnchor.constraint(equalTo: bottomAnchor),
             movieImage.trailingAnchor.constraint(equalTo: trailingAnchor),
+            movieImage.bottomAnchor.constraint(equalTo: bottomAnchor),
             movieImage.leadingAnchor.constraint(equalTo: leadingAnchor),
         ])
         self.layer.cornerRadius = 20
         self.clipsToBounds = true
+    }
+    
+    public func setupCell(content: String, title: String) {
+        let fullURL = URL(string: "https://image.tmdb.org/t/p/original\(content)")
+        DispatchQueue.global(qos: .background).async { [weak self] in
+            guard let self else { return }
+            if let urlPhoto = fullURL {
+                DispatchQueue.main.async {
+                    self.movieImage.sd_setImage(with: urlPhoto)
+                }
+            }
+        }
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        movieImage.image = nil
     }
 }
