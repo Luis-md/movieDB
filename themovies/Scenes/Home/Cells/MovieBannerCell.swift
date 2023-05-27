@@ -13,6 +13,7 @@ final class MovieBannerCell: UICollectionViewCell {
         let img = UIImageView()
         img.translatesAutoresizingMaskIntoConstraints = false
         img.contentMode = .scaleAspectFill
+        img.backgroundColor = .lightGray
         return img
     }()
     

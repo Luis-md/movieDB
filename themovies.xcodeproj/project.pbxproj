@@ -9,8 +9,12 @@
 /* Begin PBXBuildFile section */
 		714ADA6929FEA8B000417AC1 /* GradientButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 714ADA6829FEA8B000417AC1 /* GradientButton.swift */; };
 		715D2E512A00524D00103710 /* ThemePillsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 715D2E502A00524D00103710 /* ThemePillsCell.swift */; };
+		7165BB882A22255200005F1B /* HomeStrings.strings in Sources */ = {isa = PBXBuildFile; fileRef = 7165BB8A2A22255200005F1B /* HomeStrings.strings */; };
+		71916FBA2A224A2400BC48B3 /* CellIdentifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71916FB92A224A2400BC48B3 /* CellIdentifier.swift */; };
 		7195BA192A1AACBC00FB1735 /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = 7195BA182A1AACBC00FB1735 /* SDWebImage */; };
 		7195BA1B2A1AACBC00FB1735 /* SDWebImageMapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 7195BA1A2A1AACBC00FB1735 /* SDWebImageMapKit */; };
+		7195BA222A1AB86500FB1735 /* HomeStrings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7195BA212A1AB86500FB1735 /* HomeStrings.swift */; };
+		7195BA242A1AB8F500FB1735 /* StringExt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7195BA232A1AB8F500FB1735 /* StringExt.swift */; };
 		71A9811F2A01BCCD009FD61C /* MovieBannerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71A9811E2A01BCCD009FD61C /* MovieBannerCell.swift */; };
 		71ACD14729FFD55D003F41B5 /* MainCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71ACD14629FFD55D003F41B5 /* MainCoordinator.swift */; };
 		71ACD16729FFE27D003F41B5 /* LoginConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71ACD16629FFE27D003F41B5 /* LoginConfigurator.swift */; };
@@ -47,6 +51,11 @@
 /* Begin PBXFileReference section */
 		714ADA6829FEA8B000417AC1 /* GradientButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientButton.swift; sourceTree = "<group>"; };
 		715D2E502A00524D00103710 /* ThemePillsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemePillsCell.swift; sourceTree = "<group>"; };
+		7165BB892A22255200005F1B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/HomeStrings.strings; sourceTree = "<group>"; };
+		7165BB8B2A22262500005F1B /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/HomeStrings.strings"; sourceTree = "<group>"; };
+		71916FB92A224A2400BC48B3 /* CellIdentifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellIdentifier.swift; sourceTree = "<group>"; };
+		7195BA212A1AB86500FB1735 /* HomeStrings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeStrings.swift; sourceTree = "<group>"; };
+		7195BA232A1AB8F500FB1735 /* StringExt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExt.swift; sourceTree = "<group>"; };
 		71A9811E2A01BCCD009FD61C /* MovieBannerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieBannerCell.swift; sourceTree = "<group>"; };
 		71ACD14629FFD55D003F41B5 /* MainCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainCoordinator.swift; sourceTree = "<group>"; };
 		71ACD16629FFE27D003F41B5 /* LoginConfigurator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginConfigurator.swift; sourceTree = "<group>"; };
@@ -112,6 +121,40 @@
 			path = Cells;
 			sourceTree = "<group>";
 		};
+		71916FB82A224A1200BC48B3 /* Identifier */ = {
+			isa = PBXGroup;
+			children = (
+				71916FB92A224A2400BC48B3 /* CellIdentifier.swift */,
+			);
+			path = Identifier;
+			sourceTree = "<group>";
+		};
+		7195BA1C2A1AB7AE00FB1735 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				71916FB82A224A1200BC48B3 /* Identifier */,
+				7195BA1D2A1AB7BC00FB1735 /* Strings */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		7195BA1D2A1AB7BC00FB1735 /* Strings */ = {
+			isa = PBXGroup;
+			children = (
+				7195BA202A1AB84700FB1735 /* Home */,
+			);
+			path = Strings;
+			sourceTree = "<group>";
+		};
+		7195BA202A1AB84700FB1735 /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				7165BB8A2A22255200005F1B /* HomeStrings.strings */,
+				7195BA212A1AB86500FB1735 /* HomeStrings.swift */,
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
 		71ACD14429FFD538003F41B5 /* Scenes */ = {
 			isa = PBXGroup;
 			children = (
@@ -153,6 +196,7 @@
 		71BD5D4729FD63C80068E25F /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				7195BA1C2A1AB7AE00FB1735 /* Resources */,
 				71F4498F2A11173700360ADF /* Network */,
 				714ADA6729FEA8A000417AC1 /* Component */,
 				71BD5D4829FD63D70068E25F /* Extensions */,
@@ -166,6 +210,7 @@
 			children = (
 				71BD5D4929FD63EC0068E25F /* UIViewExt.swift */,
 				71B7EC592A000BC0008237F7 /* UIFontExt.swift */,
+				7195BA232A1AB8F500FB1735 /* StringExt.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -286,6 +331,7 @@
 			knownRegions = (
 				en,
 				Base,
+				"pt-BR",
 			);
 			mainGroup = 71D1604629FD60600012C622;
 			packageReferences = (
@@ -333,9 +379,11 @@
 				71ACD18029FFE54F003F41B5 /* LoginStarterModels.swift in Sources */,
 				71ACD18429FFE77F003F41B5 /* HomeConfigurator.swift in Sources */,
 				71ACD17529FFE416003F41B5 /* HomeViewController.swift in Sources */,
+				7195BA222A1AB86500FB1735 /* HomeStrings.swift in Sources */,
 				71F449912A11174F00360ADF /* ServiceAPI.swift in Sources */,
 				71ACD17229FFE416003F41B5 /* HomeWorker.swift in Sources */,
 				71BD5D4A29FD63EC0068E25F /* UIViewExt.swift in Sources */,
+				7165BB882A22255200005F1B /* HomeStrings.strings in Sources */,
 				71ACD16729FFE27D003F41B5 /* LoginConfigurator.swift in Sources */,
 				71ACD17D29FFE54F003F41B5 /* LoginStarterPresenter.swift in Sources */,
 				71D1605329FD60610012C622 /* AppDelegate.swift in Sources */,
@@ -343,6 +391,8 @@
 				71ACD18229FFE54F003F41B5 /* LoginStarterInteractor.swift in Sources */,
 				71B7EC5A2A000BC0008237F7 /* UIFontExt.swift in Sources */,
 				71ACD17E29FFE54F003F41B5 /* LoginStarterWorker.swift in Sources */,
+				7195BA242A1AB8F500FB1735 /* StringExt.swift in Sources */,
+				71916FBA2A224A2400BC48B3 /* CellIdentifier.swift in Sources */,
 				71D1605529FD60610012C622 /* SceneDelegate.swift in Sources */,
 				715D2E512A00524D00103710 /* ThemePillsCell.swift in Sources */,
 				71A9811F2A01BCCD009FD61C /* MovieBannerCell.swift in Sources */,
@@ -354,6 +404,15 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
+		7165BB8A2A22255200005F1B /* HomeStrings.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				7165BB892A22255200005F1B /* en */,
+				7165BB8B2A22262500005F1B /* pt-BR */,
+			);
+			name = HomeStrings.strings;
+			sourceTree = "<group>";
+		};
 		71D1605D29FD60650012C622 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -369,6 +428,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -429,6 +489,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";

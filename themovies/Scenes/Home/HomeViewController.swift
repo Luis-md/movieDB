@@ -24,21 +24,56 @@ struct ContentMovie {
     let gender: String
 }
 
+extension HomeViewController.Layout {
+    enum FontSize: CGFloat {
+        case small = 16
+        case medium = 20
+        case large = 28
+    }
+    
+    enum ComponentSizes: CGFloat {
+        case bannerWidth = 124
+        case bannerHeight = 188
+        case imageSize = 40
+        case pillsHeight = 30
+        case distance = 16
+    }
+    
+    enum SpaceConstraints: CGFloat {
+        case base01 = 16
+        case base02 = 20
+        
+    }
+}
+
 class HomeViewController: UIViewController, HomeDisplayLogic {
     var interactor: HomeBusinessLogic?
     var themes: [ContentMovie] = []
     var movies: [DetailedMovie] = []
     var popularMoviesList: [DetailedMovie] = []
     
+    struct Layout {}
+    
     // MARK: Layout
     lazy var scrollView: UIScrollView = {
         let sv = UIScrollView()
         sv.translatesAutoresizingMaskIntoConstraints = false
         sv.contentInsetAdjustmentBehavior = .never
+        sv.showsVerticalScrollIndicator = false
         return sv
     }()
     
-    lazy var containerView: UIView = {
+    lazy var containerView: UIStackView = {
+        let stack = UIStackView()
+        stack.alignment = .center
+        stack.spacing = Layout.ComponentSizes.distance.rawValue
+        stack.distribution = .fill
+        stack.axis = .vertical
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        return stack
+    }()
+    
+    lazy var headerView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
@@ -46,9 +81,9 @@ class HomeViewController: UIViewController, HomeDisplayLogic {
 
     lazy var titlePage: UILabel = {
         let lbl = UILabel()
-        lbl.text = "O que você quer assistir hoje?"
+        lbl.text = HomeStrings.titleText.localized()
         lbl.numberOfLines = 0
-        lbl.font = UIFont.Inter(.bold, size: 28)
+        lbl.font = UIFont.Inter(.bold, size: Layout.FontSize.large.rawValue)
         lbl.textColor = .white
         lbl.translatesAutoresizingMaskIntoConstraints = false
         return lbl
@@ -71,12 +106,12 @@ class HomeViewController: UIViewController, HomeDisplayLogic {
     
     lazy var textField: UITextField = {
         let tf = UITextField()
-        let placeholderText = "Buscar..."
+        let placeholderText = HomeStrings.searchTitle.localized()
         let placeholderColor = UIColor.lightGray
         let attributes = [NSAttributedString.Key.foregroundColor: placeholderColor]
         let attributedPlaceholder = NSAttributedString(string: placeholderText, attributes: attributes)
         tf.attributedPlaceholder = attributedPlaceholder
-        tf.font = UIFont.Inter(.semiBold, size: 16)
+        tf.font = UIFont.Inter(.semiBold, size: Layout.FontSize.small.rawValue)
         tf.textColor = .white
         tf.borderStyle = UITextField.BorderStyle.roundedRect
         tf.autocorrectionType = UITextAutocorrectionType.no
@@ -102,16 +137,16 @@ class HomeViewController: UIViewController, HomeDisplayLogic {
         let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
         cv.showsHorizontalScrollIndicator = false
         cv.translatesAutoresizingMaskIntoConstraints = false
-        cv.register(ThemePillsCell.self, forCellWithReuseIdentifier: "cell")
+        cv.register(ThemePillsCell.self, forCellWithReuseIdentifier: ThemePillsCell.identifier)
         cv.backgroundColor = .clear
         return cv
     }()
     
     lazy var latestLabel: UILabel = {
         let lbl = UILabel()
-        lbl.text = "Latest movies"
-        lbl.numberOfLines = 0
-        lbl.font = UIFont.Inter(.bold, size: 20)
+        lbl.text = HomeStrings.latestMovies.localized()
+        lbl.numberOfLines = .zero
+        lbl.font = UIFont.Inter(.bold, size: Layout.FontSize.medium.rawValue)
         lbl.textColor = .white
         lbl.translatesAutoresizingMaskIntoConstraints = false
         return lbl
@@ -123,7 +158,7 @@ class HomeViewController: UIViewController, HomeDisplayLogic {
         let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
         cv.showsHorizontalScrollIndicator = false
         cv.translatesAutoresizingMaskIntoConstraints = false
-        cv.register(MovieBannerCell.self, forCellWithReuseIdentifier: "movie_cell")
+        cv.register(MovieBannerCell.self, forCellWithReuseIdentifier: MovieBannerCell.identifier)
         cv.backgroundColor = .clear
         cv.contentInsetAdjustmentBehavior = .never
         return cv
@@ -132,8 +167,8 @@ class HomeViewController: UIViewController, HomeDisplayLogic {
     lazy var popularLabel: UILabel = {
         let lbl = UILabel()
         lbl.text = "Most popular"
-        lbl.numberOfLines = 0
-        lbl.font = UIFont.Inter(.bold, size: 20)
+        lbl.numberOfLines = .zero
+        lbl.font = UIFont.Inter(.bold, size: Layout.FontSize.medium.rawValue)
         lbl.textColor = .white
         lbl.translatesAutoresizingMaskIntoConstraints = false
         return lbl
@@ -145,7 +180,7 @@ class HomeViewController: UIViewController, HomeDisplayLogic {
         let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
         cv.showsHorizontalScrollIndicator = false
         cv.translatesAutoresizingMaskIntoConstraints = false
-        cv.register(MovieBannerCell.self, forCellWithReuseIdentifier: "movie_cell")
+        cv.register(MovieBannerCell.self, forCellWithReuseIdentifier: MovieBannerCell.identifier)
         cv.backgroundColor = .clear
         cv.contentInsetAdjustmentBehavior = .never
         return cv
@@ -224,31 +259,31 @@ extension HomeViewController {
     private func setupLayout() {
         view.addSubview(scrollView)
         scrollView.addSubview(containerView)
-        containerView.addSubview(titlePage)
-        containerView.addSubview(profileImage)
-        containerView.addSubview(textField)
-        containerView.addSubview(themePills)
-        containerView.addSubview(latestLabel)
-        containerView.addSubview(movieBanner)
-        containerView.addSubview(popularLabel)
-        containerView.addSubview(popularMovies)
+        containerView.addArrangedSubview(headerView)
+        headerView.addSubview(titlePage)
+        headerView.addSubview(profileImage)
+        containerView.addArrangedSubview(textField)
+        containerView.addArrangedSubview(themePills)
+        containerView.addArrangedSubview(latestLabel)
+        containerView.addArrangedSubview(movieBanner)
+        containerView.addArrangedSubview(popularLabel)
+        containerView.addArrangedSubview(popularMovies)
         
         NSLayoutConstraint.activate([
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            scrollView.widthAnchor.constraint(equalTo: view.widthAnchor),
-            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            scrollView.topAnchor.constraint(equalTo: view.topAnchor),
             scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            
+
             containerView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
             containerView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
-            containerView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
             containerView.topAnchor.constraint(equalTo: scrollView.topAnchor),
             containerView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
-            containerView.heightAnchor.constraint(equalTo: scrollView.frameLayoutGuide.heightAnchor),
+            containerView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
             
-            titlePage.topAnchor.constraint(equalTo: containerView.safeAreaLayoutGuide.topAnchor, constant: 64),
+            titlePage.topAnchor.constraint(equalTo: headerView.safeAreaLayoutGuide.topAnchor, constant: 64),
             titlePage.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 16),
+            titlePage.bottomAnchor.constraint(equalTo: headerView.bottomAnchor),
             
             profileImage.centerYAnchor.constraint(equalTo: titlePage.centerYAnchor),
             profileImage.leadingAnchor.constraint(equalTo: titlePage.trailingAnchor, constant: 56),
@@ -256,34 +291,27 @@ extension HomeViewController {
             profileImage.heightAnchor.constraint(equalToConstant: 40),
             profileImage.widthAnchor.constraint(equalToConstant: 40),
             
-            textField.topAnchor.constraint(equalTo: titlePage.bottomAnchor, constant: 28),
-            textField.trailingAnchor.constraint(equalTo: profileImage.trailingAnchor),
-            textField.leadingAnchor.constraint(equalTo: titlePage.leadingAnchor),
-            
-            themePills.topAnchor.constraint(equalTo: textField.bottomAnchor, constant: 16),
-            themePills.trailingAnchor.constraint(equalTo: textField.trailingAnchor),
+            textField.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -16),
+            textField.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 16),
+
+            themePills.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
             themePills.leadingAnchor.constraint(equalTo: textField.leadingAnchor),
-            themePills.heightAnchor.constraint(equalToConstant: 30),
-            
-            latestLabel.topAnchor.constraint(equalTo: themePills.bottomAnchor, constant: 20),
-            latestLabel.trailingAnchor.constraint(equalTo: themePills.trailingAnchor),
+            themePills.heightAnchor.constraint(equalToConstant: Layout.ComponentSizes.pillsHeight.rawValue),
+
             latestLabel.leadingAnchor.constraint(equalTo: themePills.leadingAnchor),
-            
-            movieBanner.topAnchor.constraint(equalTo: latestLabel.bottomAnchor, constant: 16),
+
             movieBanner.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
             movieBanner.leadingAnchor.constraint(equalTo: latestLabel.leadingAnchor),
             movieBanner.heightAnchor.constraint(equalToConstant: view.frame.height / 4),
-            
-            popularLabel.topAnchor.constraint(equalTo: movieBanner.bottomAnchor, constant: 16),
-            popularLabel.trailingAnchor.constraint(equalTo: textField.trailingAnchor),
+
             popularLabel.leadingAnchor.constraint(equalTo: textField.leadingAnchor),
-            
-            popularMovies.topAnchor.constraint(equalTo: popularLabel.bottomAnchor, constant: 16),
+
             popularMovies.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
-            popularMovies.bottomAnchor.constraint(lessThanOrEqualTo: containerView.bottomAnchor, constant: -16),
             popularMovies.leadingAnchor.constraint(equalTo: popularLabel.leadingAnchor),
             popularMovies.heightAnchor.constraint(equalToConstant: view.frame.height / 4),
         ])
+        scrollView.contentSize = containerView.bounds.size
+
     }
 }
 
@@ -291,7 +319,7 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
         if collectionView == themePills {
-            return CGSize(width: themes[indexPath.item].gender.size(withAttributes: [NSAttributedString.Key.font : UIFont.Inter(.semiBold, size: 16)]).width + 33, height: 30)
+            return CGSize(width: themes[indexPath.item].gender.size(withAttributes: [NSAttributedString.Key.font : UIFont.Inter(.semiBold, size: Layout.FontSize.small.rawValue)]).width + 33, height: 30)
         } else {
             return CGSize(width: 124, height: 188)
         }
@@ -313,14 +341,14 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if collectionView == themePills {
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as? ThemePillsCell else { return UICollectionViewCell() }
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ThemePillsCell.identifier, for: indexPath) as? ThemePillsCell else { return UICollectionViewCell() }
             cell.layer.cornerRadius = cell.frame.height / 2
             cell.layer.masksToBounds = true
             cell.setupCell(content: themes[indexPath.row])
             
             return cell
         } else {
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "movie_cell", for: indexPath) as? MovieBannerCell else { return UICollectionViewCell() }
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MovieBannerCell.identifier, for: indexPath) as? MovieBannerCell else { return UICollectionViewCell() }
             let isPopular = collectionView == popularMovies
             let movie = isPopular ? popularMoviesList[indexPath.row] : movies[indexPath.row]
             if cell.movieImage.image == nil {
