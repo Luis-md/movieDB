@@ -14,16 +14,15 @@ import UIKit
 
 enum Home
 {
-  // MARK: Use cases
-  
-  enum Something {
-    struct Request {
+    // MARK: Use cases
+    
+    enum Something {
+        struct Request {}
+        
+        struct Response {}
+        
+        struct ViewModel {}
     }
-    struct Response {
-    }
-    struct ViewModel {
-    }
-  }
     
     enum MovieGenderFilter {
         struct Request {
@@ -40,14 +39,23 @@ enum Home
     }
     
     enum MovieBanner {
-        struct Request {
-        }
+        struct Request { }
         struct Response {
-            let images: Movie
+            let images: ContentResult
         }
         struct ViewModel {
-            let images: Movie
+            let images: [DetailedContent]
         }
     }
     
+    enum Pagination {
+        struct Request {}
+        
+        struct Response {}
+        
+        struct ViewModel {
+            let stopPagination: Bool
+        }
+
+    }
 }

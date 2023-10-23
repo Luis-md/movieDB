@@ -8,6 +8,7 @@
 import Foundation
 
 enum FeatureKind {
+    case login
     case home
 }
 
@@ -16,6 +17,8 @@ extension String {
         var filename = String()
         
         switch feature {
+        case .login:
+            filename = "LoginStrings"
         case .home:
             filename = "HomeStrings"
         }

@@ -13,24 +13,32 @@ enum APIError: Error {
 }
 
 protocol MovieProvider {
-    func nowPlaying(completion: @escaping((Result<Movie, APIError>) -> Void))
-    func popularMovie(completion: @escaping((Result<Movie, APIError>) -> Void))
+    func nowPlaying(page: Int, completion: @escaping((Result<ContentResult, APIError>) -> Void))
+    func popularMovie(page: Int, completion: @escaping((Result<ContentResult, APIError>) -> Void))
+    func popularSerie(page: Int, completion: @escaping((Result<ContentResult, APIError>) -> Void))
+    func getOnAirSerie(page: Int, completion: @escaping((Result<ContentResult, APIError>) -> Void))
 }
 
 class ServiceAPI: MovieProvider {
-    private let baseUrl: String = "https://api.themoviedb.org/3/movie"
-    private let apiKey: String = "<<APIKEY>>"
+    private let baseUrl: String = "https://api.themoviedb.org/3"
+    private let apiKey: String = "?api_key=e6a0bb4b36db22f170511e1bd3b86e5a"
     
     private enum APIPath {
         case nowPlaying
         case popular
+        case popularSerie
+        case onAirSerie
         
         var path: String {
             switch self {
             case .nowPlaying:
-                return "/now_playing"
+                return "/movie/now_playing"
             case .popular:
-                return "/popular"
+                return "/movie/popular"
+            case .popularSerie:
+                return "/tv/top_rated"
+            case .onAirSerie:
+                return "/tv/airing_today"
             }
         }
     }
@@ -39,22 +47,40 @@ class ServiceAPI: MovieProvider {
         case GET
     }
     
-    func nowPlaying(completion: @escaping((Result<Movie, APIError>) -> Void)) {
-        configRequest(endpoint: .nowPlaying, completion: completion)
+    func nowPlaying(page: Int, completion: @escaping((Result<ContentResult, APIError>) -> Void)) {
+        configRequest(page: page, endpoint: .nowPlaying, completion: completion)
     }
     
-    func popularMovie(completion: @escaping ((Result<Movie, APIError>) -> Void)) {
-        configRequest(endpoint: .popular, completion: completion)
+    func popularMovie(page: Int, completion: @escaping ((Result<ContentResult, APIError>) -> Void)) {
+        configRequest(page: page, endpoint: .popular, completion: completion)
     }
     
-    private func configRequest<T:Codable>(endpoint: APIPath, method: Method = .GET, completion: @escaping((Result<T, APIError>) -> Void)) {
-        let path = "\(baseUrl)\(endpoint.path)\(apiKey)"
+    func popularSerie(page: Int, completion: @escaping ((Result<ContentResult, APIError>) -> Void)) {
+        configRequest(page: page, endpoint: .popularSerie, completion: completion)
+    }
+    
+    func getOnAirSerie(page: Int, completion: @escaping ((Result<ContentResult, APIError>) -> Void)) {
+        configRequest(page: page, endpoint: .onAirSerie, completion: completion)
+    }
+    
+    private func configRequest<T:Codable>(page: Int? = nil, endpoint: APIPath, method: Method = .GET, completion: @escaping((Result<T, APIError>) -> Void)) {
+        let path = "\(baseUrl)\(endpoint.path)"
+        let language = Locale.current.languageCode == "pt" ? "pt-Br" : "en-US"
+        var urlComponents = URLComponents(string: path)
+        urlComponents?.queryItems = [
+            URLQueryItem(name: "api_key", value: "e6a0bb4b36db22f170511e1bd3b86e5a"),
+            URLQueryItem(name: "language", value: language)
+        ]
         
-        guard let url = URL(string: path) else {
+        if let pageNum = page {
+            urlComponents?.queryItems?.append(URLQueryItem(name: "page",
+                                                           value: "\(pageNum)"))
+        }
+        
+        guard let url = urlComponents?.url else {
             completion(.failure(.generic))
             return
         }
-        
         var request = URLRequest(url: url)
         request.httpMethod = "\(method)"
         request.allHTTPHeaderFields = ["Content-Type":"application/json"]
@@ -73,7 +99,9 @@ class ServiceAPI: MovieProvider {
                     completion(.failure(.generic))
                     return
                 }
-                let object = try JSONDecoder().decode(T.self, from: data)
+                let decoder = JSONDecoder()
+                decoder.keyDecodingStrategy = .convertFromSnakeCase
+                let object = try decoder.decode(T.self, from: data)
                 completion(.success(object))
             } catch {
                 completion(.failure(.parsingError))

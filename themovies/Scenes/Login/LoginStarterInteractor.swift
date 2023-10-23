@@ -14,7 +14,6 @@ import UIKit
 
 protocol LoginStarterBusinessLogic {
     func startLoginFields()
-    func doSomething(request: LoginStarter.Something.Request)
 }
 
 protocol LoginStarterDataStore
@@ -30,15 +29,7 @@ class LoginStarterInteractor: LoginStarterBusinessLogic, LoginStarterDataStore
     //var name: String = ""
     
     // MARK: Do something
-    
-    func doSomething(request: LoginStarter.Something.Request) {
-        worker = LoginStarterWorker()
-        worker?.doSomeWork()
-        
-        let response = LoginStarter.Something.Response()
-            //presenter?.presentSomething(response: response)
-    }
-    
+
     func startLoginFields() {
         coordinator?.goesToHome()
     }

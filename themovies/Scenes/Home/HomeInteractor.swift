@@ -15,8 +15,9 @@ import UIKit
 protocol HomeBusinessLogic {
     func changeSelectedItem(request: Home.MovieGenderFilter.Request)
     func getMovieThemes()
-    func getMovies()
-    func getPopular()
+    func getContent()
+    func goesToDetail(content: DetailedContent)
+    func loadMoreItems()
 }
 
 protocol HomeDataStore {
@@ -28,17 +29,24 @@ class HomeInteractor: HomeBusinessLogic, HomeDataStore {
     var worker: HomeWorker?
     var service: MovieProvider?
     
-    var themes: [ContentMovie] = [ContentMovie(isSelected: false, gender: "Filmes"),
-                                  ContentMovie(isSelected: false, gender: "Séries"),
-                                  ContentMovie(isSelected: false, gender: "Novelas"),
-                                  ContentMovie(isSelected: false, gender: "Animes"),
-                                  ContentMovie(isSelected: false, gender: "Seriados"),
-                                  ContentMovie(isSelected: false, gender: "Filmes"),
-                                  ContentMovie(isSelected: false, gender: "Novelas"),
-                                  ContentMovie(isSelected: false, gender: "Animes"),
-                                  ContentMovie(isSelected: false, gender: "Séries"),]
+    private var contentPage: Int = 1
+    private var isRequesting = false
+    
+    var themes: [ContentMovie] = [ContentMovie(isSelected: true,
+                                               gender: "Filmes populares",
+                                               type: .popularMovie),
+                                  ContentMovie(isSelected: false,
+                                               gender: "Filmes em cartaz",
+                                               type: .onAirMovie),
+                                  ContentMovie(isSelected: false,
+                                               gender: "Séries populares",
+                                               type: .popularSeries),
+                                  ContentMovie(isSelected: false,
+                                               gender: "Séries no ar",
+                                               type: .onAirSeries)]
     
     var coordinator: Coordinator?
+    private var content: [DetailedContent] = []
     
     // MARK: Do something
     func getMovieThemes() {
@@ -47,26 +55,25 @@ class HomeInteractor: HomeBusinessLogic, HomeDataStore {
     }
     
     func changeSelectedItem(request: Home.MovieGenderFilter.Request) {
-        var updatedThemes: [ContentMovie] = []
-        themes.forEach { content in
-            var newContent = content
-            newContent.isSelected = false
-            updatedThemes.append(newContent)
-        }
-        themes = updatedThemes
-        themes[request.indexClicked].isSelected = true
+        updatePill(index: request.indexClicked)
         
-        presenter?.presentUpdatedSelection(response: Home.MovieGenderFilter.Response(movies: themes))
-
     }
     
-    func getMovies() {
-        service?.nowPlaying { [weak self] in
+    func getContent() {
+        if isRequesting { return }
+        isRequesting = true
+        service?.nowPlaying(page: contentPage) { [weak self] in
             guard let self else { return }
+            self.isRequesting = false
             switch $0 {
             case .success(let movie):
-                let response = Home.MovieBanner.Response(images: movie)
-                self.presenter?.presentMoviesBanner(response: response)
+                self.contentPage += 1
+                movie.results.forEach {[weak self] movie in
+                    guard let self = self else { return }
+                    self.content.append(movie)
+                }
+                let response = Home.MovieBanner.Response(images: ContentResult(results: self.content))
+                self.presenter?.presentPopularMovies(response: response)
             case .failure(let error):
                 print(error.localizedDescription)
             }
@@ -74,15 +81,111 @@ class HomeInteractor: HomeBusinessLogic, HomeDataStore {
     }
     
     func getPopular() {
-        service?.popularMovie { [weak self] in
+        if isRequesting { return }
+        service?.popularMovie(page: contentPage) { [weak self] in
             guard let self else { return }
+            self.isRequesting = false
             switch $0 {
             case .success(let movie):
-                let response = Home.MovieBanner.Response(images: movie)
+                self.contentPage += 1
+                movie.results.forEach {[weak self] movie in
+                    guard let self = self else { return }
+                    self.content.append(movie)
+                }
+                let response = Home.MovieBanner.Response(images: ContentResult(results: self.content))
                 self.presenter?.presentPopularMovies(response: response)
             case .failure(let error):
                 print(error.localizedDescription)
             }
+        }
+    }
+    
+    func getPopularSeries() {
+        if isRequesting { return }
+        service?.popularSerie(page: contentPage) { [weak self] in
+            guard let self else { return }
+            self.isRequesting = false
+            switch $0 {
+            case .success(let series):
+                self.contentPage += 1
+                series.results.forEach {[weak self] serie in
+                    guard let self = self else { return }
+                    self.content.append(serie)
+                }
+                let response = Home.MovieBanner.Response(images: ContentResult(results: self.content))
+                self.presenter?.presentPopularMovies(response: response)
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        }
+    }
+    
+    func getOnAirSeries() {
+        if isRequesting { return }
+        isRequesting = true
+        service?.getOnAirSerie(page: contentPage) { [weak self] result in
+            guard let self else { return }
+            self.isRequesting = false
+            switch result {
+            case .success(let series):
+                self.contentPage += 1
+                series.results.forEach {[weak self] serie in
+                    guard let self = self else { return }
+                    self.content.append(serie)
+                }
+                let response = Home.MovieBanner.Response(images: ContentResult(results: self.content))
+                self.presenter?.presentPopularMovies(response: response)
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        }
+    }
+    
+    func goesToDetail(content: DetailedContent) {
+        coordinator?.goesToDetail(id: content.id, title: content.originalTitle ?? "")
+    }
+    
+    func loadMoreItems() {
+        let updatedRequest = themes.filter { $0.isSelected }
+        guard let filterSelection = updatedRequest.first else { return }
+        updateRequest(type: filterSelection.type)
+    }
+    
+    //MARK: - Private func
+    private func updatePill(index: Int) {
+        if isRequesting { return }
+        contentPage = 1
+        content = []
+        var updatedThemes: [ContentMovie] = []
+        themes.forEach { content in
+            var newContent = content
+            newContent.isSelected = false
+            updatedThemes.append(newContent)
+        }
+        themes = updatedThemes
+        themes[index].isSelected = true
+        
+        presenter?.presentUpdatedSelection(response: Home.MovieGenderFilter.Response(movies: themes))
+        
+        let updatedRequest = themes.filter { $0.isSelected }
+        if updatedRequest.isEmpty {
+            getContent()
+        }
+        
+        guard let filterSelection = updatedRequest.first else { return }
+        updateRequest(type: filterSelection.type)
+    }
+    
+    private func updateRequest(type: MovieFilterType) {
+        switch type {
+        case .popularMovie:
+            getPopular()
+        case .onAirMovie:
+            getContent()
+        case .popularSeries:
+            getPopularSeries()
+        case .onAirSeries:
+            getOnAirSeries()
         }
     }
 }

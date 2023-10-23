@@ -35,12 +35,12 @@ class HomePresenter: HomePresentationLogic {
     }
     
     func presentMoviesBanner(response: Home.MovieBanner.Response) {
-        let viewModel = Home.MovieBanner.ViewModel(images: response.images)
+        let viewModel = Home.MovieBanner.ViewModel(images: response.images.results)
         viewController?.displayBanner(viewModel: viewModel)
     }
     
     func presentPopularMovies(response: Home.MovieBanner.Response) {
-        let viewModel = Home.MovieBanner.ViewModel(images: response.images)
-        viewController?.displayPopularMovie(viewModel: viewModel)
+        let viewModel = Home.MovieBanner.ViewModel(images: response.images.results)
+        viewController?.displayBanner(viewModel: viewModel)
     }
 }

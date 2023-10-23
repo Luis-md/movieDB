@@ -19,13 +19,6 @@ protocol LoginStarterPresentationLogic {
 class LoginStarterPresenter: LoginStarterPresentationLogic {
     weak var viewController: LoginStarterDisplayLogic?
     
-    // MARK: Do something
-    
-    func presentSomething(response: LoginStarter.Something.Response) {
-        let viewModel = LoginStarter.Something.ViewModel()
-        viewController?.displaySomething(viewModel: viewModel)
-    }
-    
     func presentLoginFields() {
         viewController?.displayLoginFields()
     }

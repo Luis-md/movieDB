@@ -13,7 +13,6 @@
 import UIKit
 
 protocol LoginStarterDisplayLogic: AnyObject {
-    func displaySomething(viewModel: LoginStarter.Something.ViewModel)
     func displayLoginFields()
 }
 
@@ -56,9 +55,9 @@ class LoginStarterViewController: UIViewController, LoginStarterDisplayLogic {
         let lightFont = UIFont.Inter(.light, size: 32)
         let boldFont = UIFont.Inter(.bold, size: 32)
         
-        let attributedText = NSMutableAttributedString(string: "Tudo sobre ", attributes: [NSAttributedString.Key.font: lightFont])
+        let attributedText = NSMutableAttributedString(string: LoginStrings.onboardingFirstPart.localized(), attributes: [NSAttributedString.Key.font: lightFont])
         
-        attributedText.append(NSAttributedString(string: "filmes, séries, animes e muito mais.", attributes: [NSAttributedString.Key.font: boldFont]))
+        attributedText.append(NSAttributedString(string: LoginStrings.onboardingSecondPart.localized(), attributes: [NSAttributedString.Key.font: boldFont]))
         
         lbl.attributedText = attributedText
         lbl.textColor = .white
@@ -68,7 +67,7 @@ class LoginStarterViewController: UIViewController, LoginStarterDisplayLogic {
     
     lazy var onboardingSubTitle: UILabel = {
         let lbl = UILabel()
-        lbl.text = "Fique por dentro das informações de filmes, séries, animes e muito mais."
+        lbl.text = LoginStrings.onboardingSubtitle.localized()
         lbl.font = UIFont.Inter(.regular, size: 16)
         lbl.textColor = .white
         lbl.numberOfLines = 0
@@ -81,7 +80,7 @@ class LoginStarterViewController: UIViewController, LoginStarterDisplayLogic {
         button.titleLabel?.textColor = .white
         
         button.layer.cornerRadius = 20
-        button.setTitle("Acessar", for: .normal)
+        button.setTitle(LoginStrings.accessButton.localized(), for: .normal)
         button.backgroundColor = UIColor(red: 0.50, green: 0.00, blue: 1.00, alpha: 1.00)
         button.addTarget(self, action: #selector(self.buttonTapped), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -93,16 +92,7 @@ class LoginStarterViewController: UIViewController, LoginStarterDisplayLogic {
     private func buttonTapped() {
         interactor?.startLoginFields()
     }
-    
-    func doSomething() {
-        let request = LoginStarter.Something.Request()
-        interactor?.doSomething(request: request)
-    }
-    
-    func displaySomething(viewModel: LoginStarter.Something.ViewModel) {
-        //nameTextField.text = viewModel.name
-    }
-    
+            
     func displayLoginFields() {
         onboardingTitle.isHidden = true
         onboardingSubTitle.isHidden = true

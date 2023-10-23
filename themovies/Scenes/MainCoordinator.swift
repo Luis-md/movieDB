@@ -13,6 +13,7 @@ protocol Coordinator {
 
     func start()
     func goesToHome()
+    func goesToDetail(id: Int, title: String)
 }
 
 class MainCoordinator: Coordinator {
@@ -33,5 +34,13 @@ class MainCoordinator: Coordinator {
         let vc = HomeViewController()
         HomeConfigurator.configure(controller: vc, coordinator: self)
         navigationController.pushViewController(vc, animated: false)
+    }
+    
+    func goesToDetail(id: Int, title: String) {
+        let vc = DetailViewController()
+        vc.contentTitle = title
+        DetailConfigurator.configure(controller: vc, coordinator: self)
+        navigationController.setNavigationBarHidden(false, animated: false)
+        navigationController.pushViewController(vc, animated: true)
     }
 }

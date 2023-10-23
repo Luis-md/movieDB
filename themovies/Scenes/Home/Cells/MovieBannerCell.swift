@@ -36,7 +36,8 @@ final class MovieBannerCell: UICollectionViewCell {
         self.clipsToBounds = true
     }
     
-    public func setupCell(content: String, title: String) {
+    public func setupCell(content: String) {
+        if content.isEmpty { return }
         let fullURL = URL(string: "https://image.tmdb.org/t/p/original\(content)")
         DispatchQueue.global(qos: .background).async { [weak self] in
             guard let self else { return }

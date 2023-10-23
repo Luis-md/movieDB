@@ -1,4 +1,6 @@
+"moviesTheme" = "Movies";
+"seriesTheme" = "Serie";
 "titleText" = "What do you want to watch today?";
 "searchTitle" = "Search...";
-"latestMovies" = "Latest movies";
+"latestMovies" = "Latest";
 "mostPopular" = "Most popular";

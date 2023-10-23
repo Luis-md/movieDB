@@ -10,6 +10,14 @@
 		714ADA6929FEA8B000417AC1 /* GradientButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 714ADA6829FEA8B000417AC1 /* GradientButton.swift */; };
 		715D2E512A00524D00103710 /* ThemePillsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 715D2E502A00524D00103710 /* ThemePillsCell.swift */; };
 		7165BB882A22255200005F1B /* HomeStrings.strings in Sources */ = {isa = PBXBuildFile; fileRef = 7165BB8A2A22255200005F1B /* HomeStrings.strings */; };
+		717ADB912A2B6E1100E8633B /* LoginStrings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 717ADB902A2B6E1100E8633B /* LoginStrings.swift */; };
+		717ADB942A2B6E3900E8633B /* LoginStrings.strings in Resources */ = {isa = PBXBuildFile; fileRef = 717ADB962A2B6E3900E8633B /* LoginStrings.strings */; };
+		717ADB9F2A2B71B200E8633B /* DetailPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 717ADB992A2B71B200E8633B /* DetailPresenter.swift */; };
+		717ADBA02A2B71B200E8633B /* DetailWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 717ADB9A2A2B71B200E8633B /* DetailWorker.swift */; };
+		717ADBA22A2B71B200E8633B /* DetailModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 717ADB9C2A2B71B200E8633B /* DetailModels.swift */; };
+		717ADBA32A2B71B200E8633B /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 717ADB9D2A2B71B200E8633B /* DetailViewController.swift */; };
+		717ADBA42A2B71B200E8633B /* DetailInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 717ADB9E2A2B71B200E8633B /* DetailInteractor.swift */; };
+		717ADBA62A2B728300E8633B /* DetailConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 717ADBA52A2B728300E8633B /* DetailConfigurator.swift */; };
 		71916FBA2A224A2400BC48B3 /* CellIdentifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71916FB92A224A2400BC48B3 /* CellIdentifier.swift */; };
 		7195BA192A1AACBC00FB1735 /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = 7195BA182A1AACBC00FB1735 /* SDWebImage */; };
 		7195BA1B2A1AACBC00FB1735 /* SDWebImageMapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 7195BA1A2A1AACBC00FB1735 /* SDWebImageMapKit */; };
@@ -53,6 +61,15 @@
 		715D2E502A00524D00103710 /* ThemePillsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemePillsCell.swift; sourceTree = "<group>"; };
 		7165BB892A22255200005F1B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/HomeStrings.strings; sourceTree = "<group>"; };
 		7165BB8B2A22262500005F1B /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/HomeStrings.strings"; sourceTree = "<group>"; };
+		717ADB902A2B6E1100E8633B /* LoginStrings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginStrings.swift; sourceTree = "<group>"; };
+		717ADB952A2B6E3900E8633B /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/LoginStrings.strings"; sourceTree = "<group>"; };
+		717ADB972A2B6E3E00E8633B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/LoginStrings.strings; sourceTree = "<group>"; };
+		717ADB992A2B71B200E8633B /* DetailPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailPresenter.swift; sourceTree = "<group>"; };
+		717ADB9A2A2B71B200E8633B /* DetailWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailWorker.swift; sourceTree = "<group>"; };
+		717ADB9C2A2B71B200E8633B /* DetailModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailModels.swift; sourceTree = "<group>"; };
+		717ADB9D2A2B71B200E8633B /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
+		717ADB9E2A2B71B200E8633B /* DetailInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailInteractor.swift; sourceTree = "<group>"; };
+		717ADBA52A2B728300E8633B /* DetailConfigurator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailConfigurator.swift; sourceTree = "<group>"; };
 		71916FB92A224A2400BC48B3 /* CellIdentifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellIdentifier.swift; sourceTree = "<group>"; };
 		7195BA212A1AB86500FB1735 /* HomeStrings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeStrings.swift; sourceTree = "<group>"; };
 		7195BA232A1AB8F500FB1735 /* StringExt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExt.swift; sourceTree = "<group>"; };
@@ -121,6 +138,28 @@
 			path = Cells;
 			sourceTree = "<group>";
 		};
+		717ADB8F2A2B6E0100E8633B /* Login */ = {
+			isa = PBXGroup;
+			children = (
+				717ADB902A2B6E1100E8633B /* LoginStrings.swift */,
+				717ADB962A2B6E3900E8633B /* LoginStrings.strings */,
+			);
+			path = Login;
+			sourceTree = "<group>";
+		};
+		717ADB982A2B718700E8633B /* Detail */ = {
+			isa = PBXGroup;
+			children = (
+				717ADB992A2B71B200E8633B /* DetailPresenter.swift */,
+				717ADB9A2A2B71B200E8633B /* DetailWorker.swift */,
+				717ADB9C2A2B71B200E8633B /* DetailModels.swift */,
+				717ADB9D2A2B71B200E8633B /* DetailViewController.swift */,
+				717ADB9E2A2B71B200E8633B /* DetailInteractor.swift */,
+				717ADBA52A2B728300E8633B /* DetailConfigurator.swift */,
+			);
+			path = Detail;
+			sourceTree = "<group>";
+		};
 		71916FB82A224A1200BC48B3 /* Identifier */ = {
 			isa = PBXGroup;
 			children = (
@@ -141,6 +180,7 @@
 		7195BA1D2A1AB7BC00FB1735 /* Strings */ = {
 			isa = PBXGroup;
 			children = (
+				717ADB8F2A2B6E0100E8633B /* Login */,
 				7195BA202A1AB84700FB1735 /* Home */,
 			);
 			path = Strings;
@@ -158,6 +198,7 @@
 		71ACD14429FFD538003F41B5 /* Scenes */ = {
 			isa = PBXGroup;
 			children = (
+				717ADB982A2B718700E8633B /* Detail */,
 				71ACD16829FFE3B6003F41B5 /* Home */,
 				71ACD14529FFD541003F41B5 /* Login */,
 				71ACD14629FFD55D003F41B5 /* MainCoordinator.swift */,
@@ -358,6 +399,7 @@
 				71B7EC5F2A000D21008237F7 /* Inter-Light.ttf in Resources */,
 				71B7EC602A000D21008237F7 /* Inter-Medium.ttf in Resources */,
 				71B7EC612A000D21008237F7 /* Inter-Regular.ttf in Resources */,
+				717ADB942A2B6E3900E8633B /* LoginStrings.strings in Resources */,
 				71B7EC622A000D21008237F7 /* Inter-SemiBold.ttf in Resources */,
 				71B7EC632A000D21008237F7 /* Inter-Thin.ttf in Resources */,
 				71D1605F29FD60650012C622 /* LaunchScreen.storyboard in Resources */,
@@ -379,10 +421,12 @@
 				71ACD18029FFE54F003F41B5 /* LoginStarterModels.swift in Sources */,
 				71ACD18429FFE77F003F41B5 /* HomeConfigurator.swift in Sources */,
 				71ACD17529FFE416003F41B5 /* HomeViewController.swift in Sources */,
+				717ADBA32A2B71B200E8633B /* DetailViewController.swift in Sources */,
 				7195BA222A1AB86500FB1735 /* HomeStrings.swift in Sources */,
 				71F449912A11174F00360ADF /* ServiceAPI.swift in Sources */,
 				71ACD17229FFE416003F41B5 /* HomeWorker.swift in Sources */,
 				71BD5D4A29FD63EC0068E25F /* UIViewExt.swift in Sources */,
+				717ADBA42A2B71B200E8633B /* DetailInteractor.swift in Sources */,
 				7165BB882A22255200005F1B /* HomeStrings.strings in Sources */,
 				71ACD16729FFE27D003F41B5 /* LoginConfigurator.swift in Sources */,
 				71ACD17D29FFE54F003F41B5 /* LoginStarterPresenter.swift in Sources */,
@@ -391,11 +435,16 @@
 				71ACD18229FFE54F003F41B5 /* LoginStarterInteractor.swift in Sources */,
 				71B7EC5A2A000BC0008237F7 /* UIFontExt.swift in Sources */,
 				71ACD17E29FFE54F003F41B5 /* LoginStarterWorker.swift in Sources */,
+				717ADB9F2A2B71B200E8633B /* DetailPresenter.swift in Sources */,
+				717ADB912A2B6E1100E8633B /* LoginStrings.swift in Sources */,
+				717ADBA02A2B71B200E8633B /* DetailWorker.swift in Sources */,
+				717ADBA22A2B71B200E8633B /* DetailModels.swift in Sources */,
 				7195BA242A1AB8F500FB1735 /* StringExt.swift in Sources */,
 				71916FBA2A224A2400BC48B3 /* CellIdentifier.swift in Sources */,
 				71D1605529FD60610012C622 /* SceneDelegate.swift in Sources */,
 				715D2E512A00524D00103710 /* ThemePillsCell.swift in Sources */,
 				71A9811F2A01BCCD009FD61C /* MovieBannerCell.swift in Sources */,
+				717ADBA62A2B728300E8633B /* DetailConfigurator.swift in Sources */,
 				71F449942A1119FF00360ADF /* Movie.swift in Sources */,
 				71ACD17429FFE416003F41B5 /* HomeModels.swift in Sources */,
 			);
@@ -411,6 +460,15 @@
 				7165BB8B2A22262500005F1B /* pt-BR */,
 			);
 			name = HomeStrings.strings;
+			sourceTree = "<group>";
+		};
+		717ADB962A2B6E3900E8633B /* LoginStrings.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				717ADB952A2B6E3900E8633B /* pt-BR */,
+				717ADB972A2B6E3E00E8633B /* en */,
+			);
+			name = LoginStrings.strings;
 			sourceTree = "<group>";
 		};
 		71D1605D29FD60650012C622 /* LaunchScreen.storyboard */ = {
