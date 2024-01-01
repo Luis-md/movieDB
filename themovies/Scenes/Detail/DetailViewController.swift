@@ -11,9 +11,10 @@
 //
 
 import UIKit
+import SDWebImage
 
 protocol DetailDisplayLogic: AnyObject {
-    func displaySomething(viewModel: Detail.Something.ViewModel)
+    func displayMovieDetail(viewModel: Detail.MovieDetail.ViewModel)
 }
 
 extension DetailViewController.Layout {
@@ -24,8 +25,6 @@ extension DetailViewController.Layout {
     }
     
     enum ComponentSizes: CGFloat {
-        case bannerWidth = 124
-        case bannerHeight = 188
         case imageSize = 40
         case pillsHeight = 30
         case distance = 16
@@ -43,37 +42,123 @@ class DetailViewController: UIViewController, DetailDisplayLogic {
     var interactor: DetailBusinessLogic?
     var contentTitle: String?
     
+    lazy var bannerImage: UIImageView = {
+        let image = UIImageView()
+        image.contentMode = .scaleAspectFill
+        image.translatesAutoresizingMaskIntoConstraints = false
+        return image
+    }()
+    
+    lazy var circleView: CircleView = {
+        let circleV = CircleView()
+        circleV.translatesAutoresizingMaskIntoConstraints = false
+        return circleV
+    }()
+    
     lazy var scrollView: UIScrollView = {
         let sv = UIScrollView()
         sv.translatesAutoresizingMaskIntoConstraints = false
-        sv.contentInsetAdjustmentBehavior = .never
-        sv.showsVerticalScrollIndicator = false
         return sv
     }()
+        
+    lazy var secondContainerView: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = .clear
+        return view
+    }()
 
-    lazy var containerView: UIStackView = {
+    lazy var informationStack: UIStackView = {
         let stack = UIStackView()
-        stack.alignment = .center
-        stack.spacing = Layout.ComponentSizes.distance.rawValue
         stack.distribution = .fill
-        stack.axis = .vertical
+        stack.alignment = .leading
+        stack.spacing = 8
         stack.translatesAutoresizingMaskIntoConstraints = false
         return stack
     }()
     
-    lazy var bannerImage: UIImageView = {
-        let img = UIImageView()
-        img.translatesAutoresizingMaskIntoConstraints = false
-        img.contentMode = .scaleAspectFill
-        img.backgroundColor = .lightGray
-        return img
+    lazy var releaseAndTitleView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .clear
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
     }()
-        
+    
+    lazy var spacerView: UIView = {
+        let view = UIView()
+        view.isUserInteractionEnabled = false
+        view.setContentHuggingPriority(.fittingSizeLevel, for: .horizontal)
+        view.setContentCompressionResistancePriority(.fittingSizeLevel, for: .horizontal)
+        return view
+    }()
+    
+    lazy var titleLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.numberOfLines = 0
+        label.font = UIFont.Inter(.regular, size: Layout.FontSize.medium.rawValue)
+        label.textColor = .white
+        return label
+    }()
+
+    
+    lazy var releaseDateLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.numberOfLines = 1
+        label.font = UIFont.Inter(.light, size: Layout.FontSize.small.rawValue)
+        label.textColor = UIColor(red: 0.73, green: 0.73, blue: 0.73, alpha: 1.00)
+        return label
+    }()
+    
+    lazy var durationLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.numberOfLines = 1
+        label.font = UIFont.Inter(.light, size: Layout.FontSize.small.rawValue)
+        label.textColor = UIColor(red: 0.73, green: 0.73, blue: 0.73, alpha: 1.00)
+        return label
+    }()
+    
+    lazy var separatorLineView: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = .gray
+        return view
+    }()
+    
+    lazy var descriptionView: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = .clear
+        return view
+    }()
+    
+    lazy var descriptionLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.numberOfLines = .zero
+        label.font = UIFont.Inter(.bold, size: Layout.FontSize.medium.rawValue)
+        label.textColor = .white
+        return label
+    }()
+    
+    lazy var containerView: UIStackView = {
+        let stack = UIStackView()
+        stack.spacing = Layout.ComponentSizes.distance.rawValue
+        stack.axis = .vertical
+        stack.distribution = .fill
+        stack.alignment = .leading
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        return stack
+    }()
+
     // MARK: View lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
         configureView()
+        setupLayout()
         loadDetails()
     }
     
@@ -84,16 +169,30 @@ class DetailViewController: UIViewController, DetailDisplayLogic {
         navigationController?.navigationBar.standardAppearance = appearance
         navigationController?.navigationBar.scrollEdgeAppearance = navigationController?.navigationBar.standardAppearance
     }
-        
+    
     // MARK: Do something
     
     func loadDetails() {
-        let request = Detail.Something.Request()
-        interactor?.doSomething(request: request)
+        containerView.isHidden = true
+        interactor?.getContentDetail()
     }
     
-    func displaySomething(viewModel: Detail.Something.ViewModel) {
-        //nameTextField.text = viewModel.name
+    func displayMovieDetail(viewModel: Detail.MovieDetail.ViewModel) {
+        DispatchQueue.global(qos: .background).async { [weak self] in
+            guard let self else { return }
+            if let urlPhoto = viewModel.poster {
+                DispatchQueue.main.async {
+                    self.containerView.isHidden = false
+                    self.bannerImage.sd_setImage(with: urlPhoto, placeholderImage: UIImage())
+                    self.descriptionLabel.text = viewModel.description
+                    self.releaseDateLabel.text = viewModel.releaseDate
+                    self.titleLabel.text = viewModel.title
+                    self.durationLabel.text = viewModel.runtime
+                    let roundedNumber = Double(round(viewModel.voteAverage * 10) / 10)
+                    self.circleView.configureCircleView(averageScore: roundedNumber, color: .red)
+                }
+            }
+        }
     }
 }
 
@@ -102,5 +201,87 @@ class DetailViewController: UIViewController, DetailDisplayLogic {
 private extension DetailViewController {
     func configureView() {
         title = contentTitle ?? "Detalhe"
+        
+        let gradientLayer = CAGradientLayer()
+        gradientLayer.frame = view.bounds
+        gradientLayer.colors = [UIColor.clear.cgColor,
+                                UIColor(red: 0.13, green: 0.13, blue: 0.18, alpha: 1.00)]
+        view.layer.addSublayer(gradientLayer)
+    }
+    
+    func setupLayout() {
+        let margins = view.layoutMarginsGuide
+        view.addSubview(scrollView)
+        scrollView.addSubview(containerView)
+        
+        NSLayoutConstraint.activate([
+            scrollView.topAnchor.constraint(equalTo: margins.topAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: margins.bottomAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor)
+        ])
+        
+        NSLayoutConstraint.activate([
+            containerView.topAnchor.constraint(equalTo: scrollView.topAnchor),
+            containerView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
+            containerView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
+            containerView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
+            containerView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
+        ])
+                        
+        NSLayoutConstraint.activate([
+            bannerImage.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width),
+            bannerImage.heightAnchor.constraint(equalToConstant: 350)
+        ])
+        
+        containerView.addArrangedSubview(bannerImage)
+        
+        containerView.addArrangedSubview(secondContainerView)
+        
+        releaseAndTitleView.addSubview(releaseDateLabel)
+        releaseAndTitleView.addSubview(titleLabel)
+        releaseAndTitleView.addSubview(durationLabel)
+        
+        informationStack.addArrangedSubview(circleView)
+        informationStack.addArrangedSubview(releaseAndTitleView)
+        
+        secondContainerView.addSubview(separatorLineView)
+        secondContainerView.addSubview(informationStack)
+        
+        NSLayoutConstraint.activate([
+            titleLabel.topAnchor.constraint(equalTo: releaseAndTitleView.topAnchor),
+            titleLabel.leadingAnchor.constraint(equalTo: releaseAndTitleView.leadingAnchor),
+            titleLabel.trailingAnchor.constraint(equalTo: releaseAndTitleView.trailingAnchor),
+            
+            releaseDateLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 8),
+            releaseDateLabel.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
+            releaseDateLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
+            
+            durationLabel.topAnchor.constraint(equalTo: releaseDateLabel.bottomAnchor, constant: 8),
+            durationLabel.leadingAnchor.constraint(equalTo: releaseDateLabel.leadingAnchor),
+            durationLabel.trailingAnchor.constraint(equalTo: releaseDateLabel.trailingAnchor),
+            durationLabel.bottomAnchor.constraint(equalTo: releaseAndTitleView.bottomAnchor),
+            
+            informationStack.topAnchor.constraint(equalTo: secondContainerView.topAnchor),
+            informationStack.leadingAnchor.constraint(equalTo: secondContainerView.leadingAnchor, constant: 12),
+            informationStack.trailingAnchor.constraint(equalTo: secondContainerView.trailingAnchor, constant: -12),
+            
+            separatorLineView.topAnchor.constraint(equalTo: informationStack.bottomAnchor, constant: 24),
+            separatorLineView.bottomAnchor.constraint(equalTo: secondContainerView.bottomAnchor),
+            separatorLineView.heightAnchor.constraint(equalToConstant: 1),
+            separatorLineView.leadingAnchor.constraint(equalTo: informationStack.leadingAnchor),
+            separatorLineView.trailingAnchor.constraint(equalTo: informationStack.trailingAnchor),
+        ])
+        
+        containerView.addArrangedSubview(descriptionView)
+        descriptionView.addSubview(descriptionLabel)
+
+        NSLayoutConstraint.activate([
+            descriptionLabel.topAnchor.constraint(equalTo: descriptionView.topAnchor, constant: 12),
+            descriptionLabel.trailingAnchor.constraint(equalTo: descriptionView.trailingAnchor, constant: -12),
+            descriptionLabel.bottomAnchor.constraint(equalTo: descriptionView.bottomAnchor),
+            descriptionLabel.leadingAnchor.constraint(equalTo: descriptionView.leadingAnchor, constant: 12),
+        ])
+
     }
 }

@@ -13,26 +13,86 @@
 import UIKit
 
 protocol DetailBusinessLogic {
-    func doSomething(request: Detail.Something.Request)
+    func getContentDetail()
 }
 
 protocol DetailDataStore {
 //    var name: String { get set }
 }
 
+public enum DetailType {
+    case movie
+    case serie
+}
+
 class DetailInteractor: DetailBusinessLogic, DetailDataStore {
-    var presenter: DetailPresentationLogic?
-    var worker: DetailWorker?
-    var coordinator: Coordinator?
-    //var name: String = ""
+    private let presenter: DetailPresentationLogic
+    private let coordinator: Coordinator
+    private let contentID: Int
+    private let service: MovieProvider
+    private let detailType: DetailType
     
-    // MARK: Do something
-    
-    func doSomething(request: Detail.Something.Request) {
-        worker = DetailWorker()
-        worker?.doSomeWork()
-        
-        let response = Detail.Something.Response()
-        presenter?.presentSomething(response: response)
+    init(presenter: DetailPresentationLogic,
+         coordinator: Coordinator,
+         contentID: Int,
+         service: MovieProvider,
+         detailType: DetailType) {
+        self.presenter = presenter
+        self.coordinator = coordinator
+        self.contentID = contentID
+        self.service = service
+        self.detailType = detailType
     }
+
+    func getContentDetail() {
+        switch detailType {
+        case .movie:
+            getMovieDetail()
+        case .serie:
+            getSerieDetail()
+        }
+    }
+}
+
+private extension DetailInteractor {
+    func getMovieDetail() {
+        service.getMovieDetail(id: contentID) { [weak self] result in
+            guard let self else { return }
+            switch result {
+            case let .success(movie):
+                let bgURL = URL(string: "https://image.tmdb.org/t/p/original\(movie.backdropPath)")
+                
+                let response = Detail.MovieDetail.Response(poster: bgURL,
+                                                           title: movie.title,
+                                                           description: movie.overview,
+                                                           releaseDate: String().formatDate(movie.releaseDate),
+                                                           voteAverage: movie.voteAverage,
+                                                           runtime: movie.runtime)
+                self.presenter.presentMovieDetail(response: response)
+            case let .failure(error):
+                print(error.localizedDescription)
+            }
+        }
+    }
+    
+    func getSerieDetail() {
+        service.getSerieDetail(id: contentID) { [weak self] result in
+            guard let self else { return }
+            switch result {
+            case let .success(serie):
+                let bgURL = URL(string: "https://image.tmdb.org/t/p/original\(serie.backdropPath)")
+                let runtimeLastEpisode = serie.lastEpisodeToAir.runtime
+                let response = Detail.MovieDetail.Response(poster: bgURL,
+                                                           title: serie.originalName,
+                                                           description: serie.overview,
+                                                           releaseDate: String().formatDate(serie.firstAirDate),
+                                                           voteAverage: serie.voteAverage,
+                                                           runtime: runtimeLastEpisode)
+                self.presenter.presentMovieDetail(response: response)
+            case let .failure(error):
+                print(error.localizedDescription)
+            }
+        }
+    }
+
 }

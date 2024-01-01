@@ -1,0 +1,9 @@
+/* 
+  DetailStrings.strings
+  themovies
+
+  Created by Luis Domingues on 01/01/24.
+  
+*/
+
+"emptyMovieDescription" = "Description not available";

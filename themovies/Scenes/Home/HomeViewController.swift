@@ -293,6 +293,7 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
         
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MovieBannerCell.identifier, for: indexPath) as? MovieBannerCell else { return UICollectionViewCell() }
         let movie = movies[indexPath.row]
+        cell.layer.shouldRasterize = true
         if cell.movieImage.image == nil {
             cell.setupCell(content: movie.posterPath ?? "")
         }

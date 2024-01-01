@@ -38,16 +38,15 @@ class GradientButton: UIView {
         
     private func configureGradient() {
         guard let colors = buttonDTO?.colors, colors.count >= 2 else {
-            // if there are less than two colors, don't set the gradient
             layer.sublayers?.first(where: { $0 is CAGradientLayer })?.removeFromSuperlayer()
             backgroundColor = .clear
             return
         }
 
         let gradient = CAGradientLayer()
-        gradient.frame = bounds // set the gradient layer's frame to match the bounds of the view
+        gradient.frame = bounds
         gradient.colors = buttonDTO?.colors.map { $0.cgColor }
-        layer.insertSublayer(gradient, at: 0) // insert the gradient layer at the bottom of the view's layer stack
+        layer.insertSublayer(gradient, at: 0)
         backgroundColor = .clear
     }
     

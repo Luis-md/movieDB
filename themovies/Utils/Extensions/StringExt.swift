@@ -10,6 +10,7 @@ import Foundation
 enum FeatureKind {
     case login
     case home
+    case detail
 }
 
 extension String {
@@ -21,8 +22,21 @@ extension String {
             filename = "LoginStrings"
         case .home:
             filename = "HomeStrings"
+        case .detail:
+            filename = "DetailStrings"
         }
         
         return NSLocalizedString(self, tableName: filename, bundle: Bundle.main, value: String(), comment: String())
     }
+    
+    func formatDate(_ mydate:String) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = DateFormatter.Style.long
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        let convertedDate = dateFormatter.date(from: mydate)
+        dateFormatter.dateFormat = "dd/MM/yyyy"
+        let date = dateFormatter.string(from: convertedDate!)
+        return date
+    }
+
 }

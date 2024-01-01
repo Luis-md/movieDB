@@ -12,20 +12,30 @@
 
 import UIKit
 
-protocol DetailPresentationLogic
-{
-  func presentSomething(response: Detail.Something.Response)
+protocol DetailPresentationLogic {
+    func presentMovieDetail(response: Detail.MovieDetail.Response)
 }
 
-class DetailPresenter: DetailPresentationLogic
-{
-  weak var viewController: DetailDisplayLogic?
-  
-  // MARK: Do something
-  
-  func presentSomething(response: Detail.Something.Response)
-  {
-    let viewModel = Detail.Something.ViewModel()
-    viewController?.displaySomething(viewModel: viewModel)
-  }
+class DetailPresenter: DetailPresentationLogic {
+    weak var viewController: DetailDisplayLogic?
+    
+    // MARK: Do something
+    func presentMovieDetail(response: Detail.MovieDetail.Response) {
+        let runtimeToHours = convertTime(minutes: response.runtime)
+        let movieDescription = response.description == "" ? DetailStrings.emptyMovieDescription.localized() : response.description
+        let viewModel = Detail.MovieDetail.ViewModel(poster: response.poster,
+                                                     title: response.title,
+                                                     description: movieDescription,
+                                                     releaseDate: "🗓 \(response.releaseDate) (BR)",
+                                                     voteAverage: response.voteAverage,
+                                                     runtime: runtimeToHours)
+        viewController?.displayMovieDetail(viewModel: viewModel)
+    }
+}
+
+private extension DetailPresenter {
+    func convertTime(minutes: Int) -> String {
+        let time = (minutes / 60, (minutes % 60))
+        return "⏳ \(time.0)h \(time.1)m"
+    }
 }

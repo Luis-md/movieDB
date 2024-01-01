@@ -26,7 +26,6 @@ class LoginStarterInteractor: LoginStarterBusinessLogic, LoginStarterDataStore
     var presenter: LoginStarterPresentationLogic?
     var worker: LoginStarterWorker?
     var coordinator: Coordinator?
-    //var name: String = ""
     
     // MARK: Do something
 

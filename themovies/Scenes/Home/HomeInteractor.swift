@@ -29,6 +29,8 @@ class HomeInteractor: HomeBusinessLogic, HomeDataStore {
     var worker: HomeWorker?
     var service: MovieProvider?
     
+    private var detailType: DetailType = .movie
+    
     private var contentPage: Int = 1
     private var isRequesting = false
     
@@ -142,7 +144,7 @@ class HomeInteractor: HomeBusinessLogic, HomeDataStore {
     }
     
     func goesToDetail(content: DetailedContent) {
-        coordinator?.goesToDetail(id: content.id, title: content.originalTitle ?? "")
+        coordinator?.goesToDetail(id: content.id, title: content.originalTitle ?? "", detailType: detailType)
     }
     
     func loadMoreItems() {
@@ -179,12 +181,16 @@ class HomeInteractor: HomeBusinessLogic, HomeDataStore {
     private func updateRequest(type: MovieFilterType) {
         switch type {
         case .popularMovie:
+            detailType = .movie
             getPopular()
         case .onAirMovie:
+            detailType = .movie
             getContent()
         case .popularSeries:
+            detailType = .serie
             getPopularSeries()
         case .onAirSeries:
+            detailType = .serie
             getOnAirSeries()
         }
     }

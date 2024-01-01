@@ -17,6 +17,8 @@ protocol MovieProvider {
     func popularMovie(page: Int, completion: @escaping((Result<ContentResult, APIError>) -> Void))
     func popularSerie(page: Int, completion: @escaping((Result<ContentResult, APIError>) -> Void))
     func getOnAirSerie(page: Int, completion: @escaping((Result<ContentResult, APIError>) -> Void))
+    func getMovieDetail(id: Int, completion: @escaping((Result<MovieDetailModel, APIError>) -> Void))
+    func getSerieDetail(id: Int, completion: @escaping((Result<SerieDetailModel, APIError>) -> Void))
 }
 
 class ServiceAPI: MovieProvider {
@@ -28,6 +30,8 @@ class ServiceAPI: MovieProvider {
         case popular
         case popularSerie
         case onAirSerie
+        case movieDetail(movieID: Int)
+        case serieDetail(serieID: Int)
         
         var path: String {
             switch self {
@@ -39,6 +43,10 @@ class ServiceAPI: MovieProvider {
                 return "/tv/top_rated"
             case .onAirSerie:
                 return "/tv/airing_today"
+            case let .movieDetail(movieID):
+                return "/movie/\(movieID)"
+            case let .serieDetail(serieID):
+                return "/tv/\(serieID)"
             }
         }
     }
@@ -61,6 +69,14 @@ class ServiceAPI: MovieProvider {
     
     func getOnAirSerie(page: Int, completion: @escaping ((Result<ContentResult, APIError>) -> Void)) {
         configRequest(page: page, endpoint: .onAirSerie, completion: completion)
+    }
+    
+    func getMovieDetail(id: Int, completion: @escaping ((Result<MovieDetailModel, APIError>) -> Void)) {
+        configRequest(endpoint: .movieDetail(movieID: id), completion: completion)
+    }
+    
+    func getSerieDetail(id: Int, completion: @escaping ((Result<SerieDetailModel, APIError>) -> Void)) {
+        configRequest(endpoint: .serieDetail(serieID: id), completion: completion)
     }
     
     private func configRequest<T:Codable>(page: Int? = nil, endpoint: APIPath, method: Method = .GET, completion: @escaping((Result<T, APIError>) -> Void)) {

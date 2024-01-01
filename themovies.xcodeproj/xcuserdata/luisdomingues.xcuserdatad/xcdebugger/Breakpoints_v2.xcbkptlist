@@ -7,47 +7,95 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "DF718E72-7C1A-4136-B028-2D570906BA4F"
+            uuid = "FECB43B5-FB77-47CE-86E4-F1F2CEB6B39E"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "themovies/Scenes/Home/HomeInteractor.swift"
+            filePath = "themovies/Scenes/Detail/DetailInteractor.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "151"
-            endingLineNumber = "151"
-            landmarkName = "updatePill(index:)"
+            startingLineNumber = "82"
+            endingLineNumber = "82"
+            landmarkName = "getSerieDetail()"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "FECB43B5-FB77-47CE-86E4-F1F2CEB6B39E - 7cd3d0cec3f64d9"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Result&lt;themovies.SerieDetailModel, themovies.APIError&gt;) -&gt; () in themovies.DetailInteractor.getSerieDetail() -&gt; ()"
+                  moduleName = "themovies"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/luisdomingues/Desktop/Swift/themovies/themovies/Scenes/Detail/DetailInteractor.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "82"
+                  endingLineNumber = "82"
+                  offsetFromSymbolStart = "377">
+               </Location>
+               <Location
+                  uuid = "FECB43B5-FB77-47CE-86E4-F1F2CEB6B39E - 7cd3d0cec3f64d9"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Result&lt;themovies.SerieDetailModel, themovies.APIError&gt;) -&gt; () in themovies.DetailInteractor.getSerieDetail() -&gt; ()"
+                  moduleName = "themovies"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/luisdomingues/Desktop/Swift/themovies/themovies/Scenes/Detail/DetailInteractor.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "82"
+                  endingLineNumber = "82"
+                  offsetFromSymbolStart = "1224">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "D66B0783-90D6-42A4-A5FC-9385666B360A"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "themovies/Scenes/Detail/DetailInteractor.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "80"
+            endingLineNumber = "80"
+            landmarkName = "getSerieDetail()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "D6D6FF12-2823-4085-807B-600CAA5AABAC"
+            uuid = "2E6DBBFC-3758-443F-9BA2-26B2DE393479"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "themovies/Scenes/Home/HomeInteractor.swift"
+            filePath = "themovies/Scenes/Detail/DetailInteractor.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "84"
-            endingLineNumber = "84"
-            landmarkName = "getPopular()"
+            startingLineNumber = "43"
+            endingLineNumber = "43"
+            landmarkName = "init(presenter:coordinator:contentID:service:detailType:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "7320087D-6072-4D63-B79C-5C082A464BAA"
+            uuid = "C2A1DC96-4A91-48BE-8FD8-C4C89A80B3CD"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "themovies/Utils/Network/ServiceAPI.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "102"
-            endingLineNumber = "102"
+            startingLineNumber = "120"
+            endingLineNumber = "120"
             landmarkName = "makeCall(with:completion:)"
             landmarkType = "7">
          </BreakpointContent>

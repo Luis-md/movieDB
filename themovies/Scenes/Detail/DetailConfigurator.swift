@@ -8,13 +8,14 @@
 import Foundation
 
 class DetailConfigurator {
-    static func configure(controller: DetailViewController, coordinator: Coordinator) {
+    static func configure(controller: DetailViewController, coordinator: Coordinator, contentID: Int, detailType: DetailType) {
         let presenter = DetailPresenter()
-        let interactor = DetailInteractor()
+        let service = ServiceAPI()
+        
+        let interactor = DetailInteractor(presenter: presenter, coordinator: coordinator, contentID: contentID, service: service, detailType: detailType)
         
         controller.interactor = interactor
         presenter.viewController = controller
-        interactor.coordinator = coordinator
-        interactor.presenter = presenter
+
     }
 }

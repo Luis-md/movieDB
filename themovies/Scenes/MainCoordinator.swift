@@ -13,7 +13,7 @@ protocol Coordinator {
 
     func start()
     func goesToHome()
-    func goesToDetail(id: Int, title: String)
+    func goesToDetail(id: Int, title: String, detailType: DetailType)
 }
 
 class MainCoordinator: Coordinator {
@@ -36,10 +36,10 @@ class MainCoordinator: Coordinator {
         navigationController.pushViewController(vc, animated: false)
     }
     
-    func goesToDetail(id: Int, title: String) {
+    func goesToDetail(id: Int, title: String, detailType: DetailType) {
         let vc = DetailViewController()
         vc.contentTitle = title
-        DetailConfigurator.configure(controller: vc, coordinator: self)
+        DetailConfigurator.configure(controller: vc, coordinator: self, contentID: id, detailType: detailType)
         navigationController.setNavigationBarHidden(false, animated: false)
         navigationController.pushViewController(vc, animated: true)
     }

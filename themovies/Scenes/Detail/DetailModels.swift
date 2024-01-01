@@ -14,18 +14,42 @@ import UIKit
 
 enum Detail
 {
-  // MARK: Use cases
-  
-  enum Something
-  {
-    struct Request
+    // MARK: Use cases
+    
+    enum Something
     {
+        struct Request
+        {
+        }
+        struct Response
+        {
+        }
+        struct ViewModel
+        {
+        }
     }
-    struct Response
-    {
+    
+    enum MovieDetail {
+        struct Request {
+            let movieID: Int
+        }
+        
+        struct Response {
+            let poster: URL?
+            let title: String
+            let description: String
+            let releaseDate: String
+            let voteAverage: Double
+            let runtime: Int
+        }
+        
+        struct ViewModel {
+            let poster: URL?
+            let title: String
+            let description: String
+            let releaseDate: String
+            let voteAverage: Double
+            let runtime: String
+        }
     }
-    struct ViewModel
-    {
-    }
-  }
 }

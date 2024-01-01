@@ -43,7 +43,7 @@ final class MovieBannerCell: UICollectionViewCell {
             guard let self else { return }
             if let urlPhoto = fullURL {
                 DispatchQueue.main.async {
-                    self.movieImage.sd_setImage(with: urlPhoto)
+                    self.movieImage.sd_setImage(with: urlPhoto, placeholderImage: UIImage())
                 }
             }
         }
